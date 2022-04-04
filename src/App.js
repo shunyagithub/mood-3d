@@ -4,10 +4,8 @@ import { Canvas, useFrame } from '@react-three/fiber';
 import React, { Suspense, useEffect, useState } from 'react';
 import * as THREE from 'three';
 
-import InterfacesLogo from './InterfacesLogo';
+import Mood from './Mood';
 import Overlay from './Overlay';
-import Wgmi from './Wgmi';
-import WgmiLogo from './WgmiLogo';
 import './styles.css';
 import { useControls } from './utils/useControl';
 
@@ -44,7 +42,7 @@ export default function App() {
 
   return (
     <div className="App">
-      <Canvas shadows dpr={[1, 2]} camera={{ position: [-10, 0, 10], fov: 8 }}>
+      <Canvas shadows dpr={[1, 2]} camera={{ position: [20, 0, 5], fov: 5 }}>
         <Suspense fallback={null}>
           <OrbitControls enabled={false} />
           <color attach="background" args={['#f0f0f0']} />
@@ -59,10 +57,10 @@ export default function App() {
             polar={[-Math.PI / 10, Math.PI / 10]}
             azimuth={[-Math.PI / 10, Math.PI / 10]}
           >
-            <Wgmi rotation={[0, 0, 0]} controls={controls} mousePos={mousePos} />
+            {/* <Mood rotation={[0, 0, 0]} controls={controls} mousePos={mousePos} /> */}
+            <Mood rotation={[0, 0, 0]} controls={controls} />
           </PresentationControls>
-          <WgmiLogo active={active} scale={1.8} />
-          <InterfacesLogo scale={1} />
+
           <Environment preset="city" />
           <Intro start={ready && clicked} set={setReady} setMousePos={setMousePos} />
         </Suspense>
@@ -80,7 +78,7 @@ function Intro({ start, set, setMousePos }) {
       setMousePos({ x: state.mouse.x, y: state.mouse.y });
       state.camera.lookAt(0, 0, 0);
       state.camera.fov = 8;
-      state.camera.position.lerp(vec.set(-18, 0, 28), 0.05);
+      state.camera.position.lerp(vec.set(50, 1, 10), 0.01);
     }
   });
 }
