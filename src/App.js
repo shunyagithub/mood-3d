@@ -1,4 +1,3 @@
-import { config, useSpring } from '@react-spring/three';
 import { Environment, OrbitControls, PresentationControls } from '@react-three/drei';
 import { Canvas, useFrame } from '@react-three/fiber';
 import React, { Suspense, useEffect, useState } from 'react';
@@ -9,43 +8,21 @@ import Overlay from './Overlay';
 import './styles.css';
 import { useControls } from './utils/useControl';
 
-const code = 'wgmi';
-
 export default function App() {
   const [clicked, setClicked] = useState(false);
   const [ready, setReady] = useState(false);
-  const [active, setActive] = useState(false);
   const [mousePos, setMousePos] = useState({ x: null, y: null });
 
   const store = { clicked, setClicked, ready, setReady };
 
   const controls = useControls();
 
-  useEffect(() => {
-    const pressed = [];
-    const downHandler = ({ key }) => {
-      pressed.push(key);
-      pressed.splice(-code.length - 1, pressed.length - code.length);
-
-      if (pressed.join('').includes(code)) {
-        setActive(true);
-      } else {
-        setActive(false);
-      }
-    };
-    window.addEventListener('keydown', downHandler);
-
-    return () => {
-      setActive(false);
-    };
-  }, [setActive]);
-
   return (
     <div className="App">
-      <Canvas shadows dpr={[1, 2]} camera={{ position: [20, 0, 5], fov: 5 }}>
+      <Canvas shadows dpr={[1, 2]} camera={{ position: [10, 0, 20], fov: 5 }}>
         <Suspense fallback={null}>
-          <OrbitControls enabled={false} />
-          <color attach="background" args={['#f0f0f0']} />
+          <OrbitControls enabled={true} />
+          <color attach="background" args={['#888']} />
           <fog attach="fog" args={['white', 60, 100]} />
           <ambientLight intensity={0.9} />
           <spotLight position={[10, 10, 10]} angle={0.15} penumbra={1} shadow-mapSize={[512, 512]} castShadow />
@@ -72,7 +49,12 @@ export default function App() {
 
 function Intro({ start, set, setMousePos }) {
   const [vec] = useState(() => new THREE.Vector3());
-  useEffect(() => setTimeout(() => set(true), 500), []);
+
+  useEffect(() => {
+    setTimeout(() => set(true), 500);
+    return () => {};
+  }, [set]);
+
   return useFrame((state) => {
     if (start) {
       setMousePos({ x: state.mouse.x, y: state.mouse.y });
