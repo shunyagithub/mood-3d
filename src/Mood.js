@@ -11,15 +11,29 @@ export default function Model(props) {
 
   const hatPosition = useSpring({
     loop: { reverse: true },
-    from: { position: [0, 10, 0] },
-    to: { position: [0, 1.64, 0] },
+    from: { position: [0, 0, 0] },
+    to: { position: [0, 2, 0] },
     config: { ...config.gentle },
   });
 
   const hatRotation = useSpring({
     loop: { reverse: true },
-    // from: { rotation: [0, 0, 0] },
-    // to: { rotation: [0, 0, -Math.PI * 2] },
+    from: { rotation: [0, 0, 0] },
+    to: { rotation: [0, 0, -Math.PI * 2] },
+  });
+
+  const eyePosition = useSpring({
+    loop: { reverse: true },
+    from: { position: [0, 0, 0] },
+    to: { position: [0, 2, 0] },
+    config: { ...config.gentle, duration: 2000 },
+  });
+
+  const eyeRotation = useSpring({
+    loop: true,
+    from: { rotation: [0, 0, 0] },
+    to: { rotation: [0, 0, Math.PI * 2] },
+    config: { duration: 2000 },
   });
 
   return (
@@ -29,88 +43,39 @@ export default function Model(props) {
         {...hatRotation}
         castShadow
         receiveShadow
-        geometry={nodes.Cylinder002.geometry}
-        material={nodes.Cylinder002.material}
-        scale={1.14}
-      >
-        <mesh
-          castShadow
-          receiveShadow
-          geometry={nodes.Cylinder003_1.geometry}
-          material={nodes.Cylinder003_1.material}
-          position={[0, 0.15, 0]}
-          scale={0.78}
-        />
-        <mesh
-          castShadow
-          receiveShadow
-          geometry={nodes.Cylinder004.geometry}
-          material={nodes.Cylinder004.material}
-          position={[0, 0.28, 0]}
-          scale={0.6}
-        />
-      </animated.mesh>
-
-      <mesh
-        castShadow
-        receiveShadow
-        geometry={nodes.Cube001.geometry}
-        material={materials.green}
-        position={[0, -1.56, 0]}
-        scale={0.58}
+        geometry={nodes.Cylinder005.geometry}
+        material={materials.pink}
+        position={[0, 1.86, 0]}
       />
+      <mesh castShadow receiveShadow geometry={nodes.Cube001.geometry} material={materials.green} />
       <mesh
         castShadow
         receiveShadow
         geometry={nodes.Cylinder.geometry}
         material={nodes.Cylinder.material}
-        position={[0, -1.5, 0]}
-        scale={1.1}
+        position={[0, -0.42, 0]}
       >
-        <mesh
-          castShadow
-          receiveShadow
-          geometry={nodes.Cylinder001.geometry}
-          material={nodes.Cylinder001.material}
-          position={[0, -0.49, 0]}
-          scale={1.01}
-        />
+        <mesh castShadow receiveShadow geometry={nodes.Cylinder001.geometry} material={nodes.Cylinder001.material} />
       </mesh>
-      <mesh castShadow receiveShadow geometry={nodes.Cube001_1.geometry} material={nodes.Cube001_1.material} />
+      <mesh castShadow receiveShadow geometry={nodes.Cube001_1.geometry} material={materials.yellow} />
       <mesh castShadow receiveShadow geometry={nodes.Cube001_2.geometry} material={materials.moutth} />
-      <mesh
-        castShadow
-        receiveShadow
-        geometry={nodes.Torus001.geometry}
-        material={nodes.Torus001.material}
-        position={[0, 0, 1]}
-        rotation={[0, 0, -Math.PI / 2]}
-        scale={0.27}
-      />
-      <mesh
-        castShadow
-        receiveShadow
-        geometry={nodes.Torus002.geometry}
-        material={nodes.Torus002.material}
-        position={[0, 0, -0.99]}
-        rotation={[0, 0, -Math.PI / 2]}
-        scale={0.27}
-      />
-      <mesh
+      <animated.mesh
+        {...eyePosition}
+        {...eyeRotation}
         castShadow
         receiveShadow
         geometry={nodes.Sphere.geometry}
         material={nodes.Sphere.material}
-        position={[0, 1.26, 0.26]}
-        scale={0.26}
+        // position={[0, 1.26, 0.26]}
       />
-      <mesh
+      <animated.mesh
+        {...eyePosition}
+        {...eyeRotation}
         castShadow
         receiveShadow
         geometry={nodes.Sphere001.geometry}
         material={nodes.Sphere001.material}
-        position={[0, 1.26, -0.26]}
-        scale={0.26}
+        // position={[0, 1.26, -0.26]}
       />
     </group>
   );
