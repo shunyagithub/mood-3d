@@ -3,10 +3,13 @@ import { Canvas, useFrame } from '@react-three/fiber';
 import React, { Suspense, useEffect, useState } from 'react';
 import * as THREE from 'three';
 
-import Mood from './Mood';
 import Overlay from './Overlay';
+import Mood from './components/Body';
+import Body from './components/Body';
 import Eye from './components/Eye';
 import Hat from './components/Hat';
+import Mouth from './components/Mouth';
+import Neck from './components/Neck';
 import './styles.css';
 import { useControls } from './utils/useControl';
 
@@ -19,14 +22,12 @@ export default function App() {
 
   const controls = useControls();
 
-  const floatDuration = 600;
-
   return (
     <div className="App">
-      <Canvas shadows dpr={[1, 2]} camera={{ position: [10, 0, 20], fov: 5 }}>
+      <Canvas shadows dpr={[1, 2]} camera={{ position: [10, 0, 20], fov: 5 }} style={{ touchAction: 'none' }}>
         <Suspense fallback={null}>
-          <OrbitControls enabled={true} />
-          <color attach="background" args={['#888']} />
+          <OrbitControls enabled={false} />
+          <color attach="background" args={['white']} />
           <fog attach="fog" args={['white', 70, 100]} />
           <ambientLight intensity={0.9} />
           <spotLight position={[10, 10, 10]} angle={0.15} penumbra={1} shadow-mapSize={[512, 512]} castShadow />
@@ -38,10 +39,11 @@ export default function App() {
             polar={[-Math.PI / 10, Math.PI / 10]}
             azimuth={[-Math.PI / 10, Math.PI / 10]}
           >
-            {/* <Mood rotation={[0, 0, 0]} controls={controls} mousePos={mousePos} /> */}
-            <Mood rotation={[0, 0, 0]} controls={controls} floatDuration={floatDuration} />
-            <Hat floatDuration={floatDuration} />
-            <Eye floatDuration={floatDuration} />
+            <Hat {...store} />
+            <Eye {...store} />
+            <Mouth {...store} />
+            <Neck {...store} />
+            <Body controls={controls} {...store} />
           </PresentationControls>
 
           <Environment preset="city" />
@@ -66,7 +68,7 @@ function Intro({ start, set, setMousePos }) {
       setMousePos({ x: state.mouse.x, y: state.mouse.y });
       state.camera.lookAt(0, 0, 0);
       state.camera.fov = 8;
-      state.camera.position.lerp(vec.set(65, 1, 25), 0.01);
+      state.camera.position.lerp(vec.set(65, 3, 10), 0.01);
     }
   });
 }
