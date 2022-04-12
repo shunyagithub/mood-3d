@@ -17,6 +17,10 @@ body {
   user-select: none;
 }
 
+canvas {
+  touch-action: none;
+}
+
 .fullscreen {
   position: absolute;
   top: 0;

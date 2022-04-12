@@ -1,10 +1,9 @@
-import { Environment, OrbitControls, PresentationControls } from '@react-three/drei';
+import { Environment, OrbitControls, PresentationControls, useProgress } from '@react-three/drei';
 import { Canvas, useFrame } from '@react-three/fiber';
 import React, { Suspense, useEffect, useState } from 'react';
 import * as THREE from 'three';
 
 import Overlay from './Overlay';
-import Mood from './components/Body';
 import Body from './components/Body';
 import Eye from './components/Eye';
 import Hat from './components/Hat';
@@ -13,10 +12,21 @@ import Neck from './components/Neck';
 import './styles.css';
 import { useControls } from './utils/useControl';
 
+const bgColors = ['#DFD3A7', '#C6D1A6', '#E4C1B6', '#C7DFE4', '#C6C9DA'];
+
 export default function App() {
   const [clicked, setClicked] = useState(false);
   const [ready, setReady] = useState(false);
   const [mousePos, setMousePos] = useState({ x: null, y: null });
+  const [bgColor, setBgColor] = useState('');
+
+  const onChangeBgColor = () => {
+    setBgColor(bgColors[Math.floor(Math.random() * bgColors.length)]);
+  };
+
+  useEffect(() => {
+    onChangeBgColor();
+  }, []);
 
   const store = { clicked, setClicked, ready, setReady };
 
@@ -24,13 +34,21 @@ export default function App() {
 
   return (
     <div className="App">
-      <Canvas shadows dpr={[1, 2]} camera={{ position: [10, 0, 20], fov: 5 }} style={{ touchAction: 'none' }}>
-        <Suspense fallback={null}>
+      <Canvas
+        shadows
+        dpr={[1, 2]}
+        camera={{ position: [10, 0, 20], fov: 5 }}
+        style={{ touchAction: 'none !important' }}
+        onClick={() => onChangeBgColor()}
+      >
+        <Suspense fallback={false}>
           <OrbitControls enabled={false} />
-          <color attach="background" args={['white']} />
+          <color attach="background" args={[bgColor]} />
           <fog attach="fog" args={['white', 70, 100]} />
           <ambientLight intensity={0.9} />
           <spotLight position={[10, 10, 10]} angle={0.15} penumbra={1} shadow-mapSize={[512, 512]} castShadow />
+          <spotLight position={[-10, 10, 10]} angle={0.15} penumbra={1} shadow-mapSize={[512, 512]} castShadow />
+
           <PresentationControls
             global
             config={{ mass: 2, tension: 500 }}
@@ -56,12 +74,18 @@ export default function App() {
 }
 
 function Intro({ start, set, setMousePos }) {
+  const { loaded } = useProgress();
+
   const [vec] = useState(() => new THREE.Vector3());
 
   useEffect(() => {
-    setTimeout(() => set(true), 500);
+    if (!loaded) {
+      return;
+    }
+
+    set(true);
     return () => {};
-  }, [set]);
+  }, [set, loaded]);
 
   return useFrame((state) => {
     if (start) {
