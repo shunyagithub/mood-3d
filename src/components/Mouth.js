@@ -17,22 +17,30 @@ export default function Mouth({ ready }, props) {
   return (
     <group ref={group} {...props} dispose={null}>
       <group name="Scene">
-        <group name="mouth" position={[0.03, 0, -0.03]}>
-          <mesh name="Cube001" castShadow receiveShadow geometry={nodes.Cube001.geometry} material={materials.yellow} />
-          <mesh
-            name="Cube001_1"
-            castShadow
-            receiveShadow
-            geometry={nodes.Cube001_1.geometry}
-            material={nodes.Cube001_1.material}
-          />
-          <mesh
-            name="Cube001_2"
-            castShadow
-            receiveShadow
-            geometry={nodes.Cube001_2.geometry}
-            material={nodes.Cube001_2.material}
-          />
+        <group name="mouthEmpty">
+          <group name="mouth">
+            <mesh
+              name="Cube001"
+              castShadow
+              receiveShadow
+              geometry={nodes.Cube001.geometry}
+              material={materials.yellow}
+            />
+            <mesh
+              name="Cube001_1"
+              castShadow
+              receiveShadow
+              geometry={nodes.Cube001_1.geometry}
+              material={nodes.Cube001_1.material}
+            />
+            <mesh
+              name="Cube001_2"
+              castShadow
+              receiveShadow
+              geometry={nodes.Cube001_2.geometry}
+              material={nodes.Cube001_2.material}
+            />
+          </group>
         </group>
       </group>
     </group>

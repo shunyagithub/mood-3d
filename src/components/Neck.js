@@ -17,14 +17,16 @@ export default function Neck({ ready }, props) {
   return (
     <group ref={group} {...props} dispose={null}>
       <group name="Scene">
-        <mesh
-          name="neck"
-          castShadow
-          receiveShadow
-          geometry={nodes.neck.geometry}
-          material={materials.green}
-          position={[0, 0.04, 0]}
-        />
+        <group name="neckEmpty" position={[0, -1.33, 0]}>
+          <mesh
+            name="neck"
+            castShadow
+            receiveShadow
+            geometry={nodes.neck.geometry}
+            material={materials.green}
+            position={[0, 1.37, 0]}
+          />
+        </group>
       </group>
     </group>
   );
