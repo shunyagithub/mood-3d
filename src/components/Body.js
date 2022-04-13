@@ -25,8 +25,8 @@ export default function Body({ ready }, props) {
           name="body_1"
           castShadow
           receiveShadow
-          geometry={nodes.body_1.geometry}
-          material={nodes.body_1.material}
+          geometry={nodes.body_1001.geometry}
+          material={nodes.body_1001.material}
           position={[0, -0.42, 0]}
         />
         <mesh

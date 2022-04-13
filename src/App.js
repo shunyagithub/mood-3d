@@ -57,9 +57,13 @@ export default function App() {
             polar={[-Math.PI / 10, Math.PI / 10]}
             azimuth={[-Math.PI / 10, Math.PI / 10]}
           >
-            <Hat {...store} />
-            <Eye {...store} />
-            <Mouth {...store} />
+            <group position={[0, 0, 0]}>
+              <Hat {...store} />
+              <Eye {...store} />
+            </group>
+            <group position={[0, 0, 0]}>
+              <Mouth {...store} />
+            </group>
             <Neck {...store} />
             <Body controls={controls} {...store} />
           </PresentationControls>

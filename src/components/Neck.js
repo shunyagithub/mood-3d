@@ -11,7 +11,7 @@ export default function Neck({ ready }, props) {
 
   const [neckMesh, setNeckMesh] = useState(0);
 
-  const onChangeBody = (idx) => {
+  const onChangeMesh = (idx) => {
     let number = idx;
     if (idx === 4) {
       number = 0;
@@ -20,14 +20,13 @@ export default function Neck({ ready }, props) {
   };
 
   useEffect(() => {
-    // You can play, stop, fade actions in here
     if (ready) {
       actions.neckAction.play();
     }
   }, [actions, ready]);
   return (
     <group ref={group} {...props} dispose={null}>
-      <group name="Neck Scene" onClick={() => onChangeBody(neckMesh + 1)}>
+      <group name="Neck Scene" onClick={() => onChangeMesh(neckMesh + 1)}>
         <group name="neckEmpty" position={[0, -1.33, 0]}>
           <mesh
             visible={neckMesh === 0}
