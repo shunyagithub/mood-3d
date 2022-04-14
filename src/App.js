@@ -1,6 +1,6 @@
 import { Environment, OrbitControls, PresentationControls, useProgress } from '@react-three/drei';
 import { Canvas, useFrame } from '@react-three/fiber';
-import React, { Suspense, useEffect, useState } from 'react';
+import React, { Suspense, useCallback, useEffect, useState } from 'react';
 import * as THREE from 'three';
 
 import Overlay from './Overlay';
@@ -18,7 +18,34 @@ export default function App() {
   const [clicked, setClicked] = useState(false);
   const [ready, setReady] = useState(false);
   const [mousePos, setMousePos] = useState({ x: null, y: null });
+
   const [bgColor, setBgColor] = useState('');
+
+  const [hatMesh, setHatMesh] = useState(0);
+  const [eyeMesh, setEyeMesh] = useState(0);
+  const [mouthMesh, setMouthMesh] = useState(0);
+  const [neckMesh, setNeckMesh] = useState(0);
+  const [bodyMesh, setBodyMesh] = useState(0);
+
+  const [mouthPos, setMouthPos] = useState([0, 0, 0]);
+  const [headPos, setHeadPos] = useState([0, 0, 0]);
+
+  const onSetMeshPosition = useCallback(() => {
+    if (mouthMesh === 0 || mouthMesh === 2) {
+      setMouthPos([0, 0, 0]);
+      setHeadPos([0, 0, 0]);
+    }
+
+    if (mouthMesh === 1) {
+      setMouthPos([0, -0.34, 0]);
+      setHeadPos([0, -0.69, 0]);
+    }
+
+    if (mouthMesh === 3) {
+      setMouthPos([0, -0.38, 0]);
+      setHeadPos([0, -0.82, 0]);
+    }
+  }, [mouthMesh]);
 
   const onChangeBgColor = () => {
     setBgColor(bgColors[Math.floor(Math.random() * bgColors.length)]);
@@ -26,7 +53,8 @@ export default function App() {
 
   useEffect(() => {
     onChangeBgColor();
-  }, []);
+    onSetMeshPosition();
+  }, [onSetMeshPosition]);
 
   const store = { clicked, setClicked, ready, setReady };
 
@@ -34,13 +62,7 @@ export default function App() {
 
   return (
     <div className="App">
-      <Canvas
-        shadows
-        dpr={[1, 2]}
-        camera={{ position: [10, 0, 20], fov: 5 }}
-        style={{ touchAction: 'none !important' }}
-        onClick={() => onChangeBgColor()}
-      >
+      <Canvas shadows dpr={[1, 2]} camera={{ position: [10, 0, 20], fov: 5 }} onClick={() => onChangeBgColor()}>
         <Suspense fallback={false}>
           <OrbitControls enabled={false} />
           <color attach="background" args={[bgColor]} />
@@ -57,15 +79,15 @@ export default function App() {
             polar={[-Math.PI / 10, Math.PI / 10]}
             azimuth={[-Math.PI / 10, Math.PI / 10]}
           >
-            <group position={[0, 0, 0]}>
-              <Hat {...store} />
-              <Eye {...store} />
+            <group position={headPos}>
+              <Hat {...store} currentMesh={hatMesh} set={setHatMesh} />
+              <Eye {...store} currentMesh={eyeMesh} set={setEyeMesh} />
             </group>
-            <group position={[0, 0, 0]}>
-              <Mouth {...store} />
+            <group position={mouthPos}>
+              <Mouth {...store} currentMesh={mouthMesh} set={setMouthMesh} />
             </group>
-            <Neck {...store} />
-            <Body controls={controls} {...store} />
+            <Neck {...store} currentMesh={neckMesh} set={setNeckMesh} />
+            <Body controls={controls} {...store} currentMesh={bodyMesh} set={setBodyMesh} />
           </PresentationControls>
 
           <Environment preset="city" />
