@@ -1,3 +1,4 @@
+import { a, config, useSpring } from '@react-spring/three';
 import { Environment, OrbitControls, PresentationControls, useProgress } from '@react-three/drei';
 import { Canvas, useFrame } from '@react-three/fiber';
 import React, { Suspense, useCallback, useEffect, useState } from 'react';
@@ -18,6 +19,7 @@ export default function App() {
   const [clicked, setClicked] = useState(false);
   const [ready, setReady] = useState(false);
   const [mousePos, setMousePos] = useState({ x: null, y: null });
+  const [moodActive, setMoodActive] = useState(false);
 
   const [bgColor, setBgColor] = useState('');
 
@@ -47,6 +49,29 @@ export default function App() {
     }
   }, [mouthMesh]);
 
+  const code = 'mood';
+
+  useEffect(() => {
+    const pressed = [];
+    const downHandler = ({ key }) => {
+      pressed.push(key);
+      pressed.splice(-code.length - 1, pressed.length - code.length);
+
+      if (pressed.join('').includes(code)) {
+        setMoodActive(true);
+        console.log('active true');
+      } else {
+        setMoodActive(false);
+        console.log('active false');
+      }
+    };
+    window.addEventListener('keydown', downHandler);
+
+    return () => {
+      setMoodActive(false);
+    };
+  }, [setMoodActive]);
+
   const onChangeBgColor = () => {
     setBgColor(bgColors[Math.floor(Math.random() * bgColors.length)]);
   };
@@ -59,6 +84,11 @@ export default function App() {
   const store = { clicked, setClicked, ready, setReady };
 
   const controls = useControls();
+
+  const { rotation } = useSpring({
+    rotation: moodActive ? [0, Math.PI * 2, 0] : [0, 0, 0],
+    config: { ...config.molasses, duration: 500, mass: 4 },
+  });
 
   return (
     <div className="App">
@@ -75,19 +105,21 @@ export default function App() {
             global
             config={{ mass: 2, tension: 500 }}
             snap={{ mass: 2, tension: 2000 }}
-            rotation={[0, 0, 0]}
+            // rotation={rotation}
             polar={[-Math.PI / 10, Math.PI / 10]}
             azimuth={[-Math.PI / 10, Math.PI / 10]}
           >
-            <group position={headPos}>
-              <Hat {...store} currentMesh={hatMesh} set={setHatMesh} />
-              <Eye {...store} currentMesh={eyeMesh} set={setEyeMesh} />
-            </group>
-            <group position={mouthPos}>
-              <Mouth {...store} currentMesh={mouthMesh} set={setMouthMesh} />
-            </group>
-            <Neck {...store} currentMesh={neckMesh} set={setNeckMesh} />
-            <Body controls={controls} {...store} currentMesh={bodyMesh} set={setBodyMesh} />
+            <a.group rotation={rotation}>
+              <group position={headPos}>
+                <Hat {...store} currentMesh={hatMesh} set={setHatMesh} />
+                <Eye {...store} currentMesh={eyeMesh} set={setEyeMesh} />
+              </group>
+              <group position={mouthPos}>
+                <Mouth {...store} currentMesh={mouthMesh} set={setMouthMesh} />
+              </group>
+              <Neck {...store} currentMesh={neckMesh} set={setNeckMesh} />
+              <Body controls={controls} {...store} currentMesh={bodyMesh} set={setBodyMesh} />
+            </a.group>
           </PresentationControls>
 
           <Environment preset="city" />
