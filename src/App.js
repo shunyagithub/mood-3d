@@ -1,6 +1,7 @@
 import { a, config, useSpring } from '@react-spring/three';
 import { Environment, OrbitControls, PresentationControls, useProgress } from '@react-three/drei';
 import { Canvas, useFrame } from '@react-three/fiber';
+import { GenericOptions, useDrag, useGesture } from '@use-gesture/react';
 import React, { Suspense, useCallback, useEffect, useState } from 'react';
 import * as THREE from 'three';
 
@@ -10,6 +11,7 @@ import Eye from './components/Eye';
 import Hat from './components/Hat';
 import Mouth from './components/Mouth';
 import Neck from './components/Neck';
+import { onChangeMesh } from './hooks/onChangeMesh';
 import './styles.css';
 import { useControls } from './utils/useControl';
 
@@ -49,6 +51,22 @@ export default function App() {
     }
   }, [mouthMesh]);
 
+  const randomMesh = () => {
+    console.log('random mesh');
+    onChangeMesh(hatMesh, setHatMesh);
+    onChangeMesh(eyeMesh, setEyeMesh);
+    onChangeMesh(mouthMesh, setMouthMesh);
+    onChangeMesh(neckMesh, setNeckMesh);
+    onChangeMesh(bodyMesh, setBodyMesh);
+  };
+
+  const bind = useGesture({
+    onDrag: () => {},
+    onDragEnd: ({ tap }) => {
+      if (!tap) randomMesh();
+    },
+  });
+
   const code = 'mood';
 
   useEffect(() => {
@@ -59,10 +77,8 @@ export default function App() {
 
       if (pressed.join('').includes(code)) {
         setMoodActive(true);
-        console.log('active true');
       } else {
         setMoodActive(false);
-        console.log('active false');
       }
     };
     window.addEventListener('keydown', downHandler);
@@ -87,7 +103,7 @@ export default function App() {
 
   const { rotation } = useSpring({
     rotation: moodActive ? [0, Math.PI * 2, 0] : [0, 0, 0],
-    config: { ...config.molasses, duration: 500, mass: 4 },
+    config: { ...config.wobbly, duration: 300 },
   });
 
   return (
@@ -105,11 +121,10 @@ export default function App() {
             global
             config={{ mass: 2, tension: 500 }}
             snap={{ mass: 2, tension: 2000 }}
-            // rotation={rotation}
             polar={[-Math.PI / 10, Math.PI / 10]}
             azimuth={[-Math.PI / 10, Math.PI / 10]}
           >
-            <a.group rotation={rotation}>
+            <a.group rotation={rotation} {...bind()}>
               <group position={headPos}>
                 <Hat {...store} currentMesh={hatMesh} set={setHatMesh} />
                 <Eye {...store} currentMesh={eyeMesh} set={setEyeMesh} />
