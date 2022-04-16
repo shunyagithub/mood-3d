@@ -1,4 +1,4 @@
-import { a, config, useSpring } from '@react-spring/three';
+import { a, config, easings, useSpring } from '@react-spring/three';
 import { Environment, OrbitControls, PresentationControls, useGLTF, useProgress } from '@react-three/drei';
 import { Canvas, useFrame } from '@react-three/fiber';
 import { useGesture } from '@use-gesture/react';
@@ -71,10 +71,12 @@ export default function App() {
     (active) => {
       const moodModeColor = materials['black'] || materials['white'];
       if (active) {
-        setHatMaterial(moodModeColor);
-        setMouthMaterial(moodModeColor);
-        setNeckMaterial(moodModeColor);
-        setBodyMaterial(moodModeColor);
+        setTimeout(() => {
+          setHatMaterial(moodModeColor);
+          setMouthMaterial(moodModeColor);
+          setNeckMaterial(moodModeColor);
+          setBodyMaterial(moodModeColor);
+        }, 250);
       } else {
         setHatMaterial(onGetRandomMaterial(materials));
         setMouthMaterial(onGetRandomMaterial(materials));
@@ -127,12 +129,12 @@ export default function App() {
 
   const { rotation } = useSpring({
     rotation: moodActive ? [0, Math.PI * 2, 0] : [0, 0, 0],
-    config: { ...config.wobbly, duration: 300 },
+    config: { ...config.wobbly, duration: 500, easing: easings.easeInOutCirc },
   });
 
   return (
     <div className="App">
-      <Canvas shadows dpr={[1, 2]} camera={{ position: [10, 0, 20], fov: 5 }} onClick={() => onChangeBgColor()}>
+      <Canvas shadows dpr={[1, 20]} camera={{ position: [10, 0, 20], fov: 5 }} onClick={() => onChangeBgColor()}>
         <Suspense fallback={false}>
           <OrbitControls enabled={false} />
           <color attach="background" args={[bgColor]} />
@@ -143,8 +145,8 @@ export default function App() {
 
           <PresentationControls
             global
-            config={{ mass: 2, tension: 500 }}
-            snap={{ mass: 2, tension: 2000 }}
+            config={{ mass: 2, tension: 1000 }}
+            snap={{ mass: 2, tension: 1000 }}
             polar={[-Math.PI / 10, Math.PI / 10]}
             azimuth={[-Math.PI / 10, Math.PI / 10]}
           >
