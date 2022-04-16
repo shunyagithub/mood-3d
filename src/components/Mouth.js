@@ -20,13 +20,7 @@ export default function Mouth({ ready, currentMesh, set, material }, props) {
       <group name="Mouth Scene">
         <group name="mouthEmpty">
           <group name="mouth_1" visible={currentMesh === 0}>
-            <mesh
-              name="Cube009"
-              castShadow
-              receiveShadow
-              geometry={nodes.Cube009.geometry}
-              material={nodes.Cube009.material}
-            />
+            <mesh name="Cube009" castShadow receiveShadow geometry={nodes.Cube009.geometry} material={material} />
             <mesh
               name="Cube009_1"
               castShadow
@@ -48,7 +42,7 @@ export default function Mouth({ ready, currentMesh, set, material }, props) {
               castShadow
               receiveShadow
               geometry={nodes.Cylinder019.geometry}
-              material={nodes.Cylinder019.material}
+              material={material}
             />
             <mesh
               name="Cylinder019_1"
@@ -59,13 +53,7 @@ export default function Mouth({ ready, currentMesh, set, material }, props) {
             />
           </group>
           <group name="mouth_3" visible={currentMesh === 2}>
-            <mesh
-              name="Cube013"
-              castShadow
-              receiveShadow
-              geometry={nodes.Cube013.geometry}
-              material={nodes.Cube013.material}
-            />
+            <mesh name="Cube013" castShadow receiveShadow geometry={nodes.Cube013.geometry} material={material} />
             <mesh
               name="Cube013_1"
               castShadow
@@ -75,13 +63,7 @@ export default function Mouth({ ready, currentMesh, set, material }, props) {
             />
           </group>
           <group name="mouth_4" position={[0, 0.03, 0]} visible={currentMesh === 3}>
-            <mesh
-              name="Cube018"
-              castShadow
-              receiveShadow
-              geometry={nodes.Cube018.geometry}
-              material={nodes.Cube018.material}
-            />
+            <mesh name="Cube018" castShadow receiveShadow geometry={nodes.Cube018.geometry} material={material} />
             <mesh
               name="Cube018_1"
               castShadow
