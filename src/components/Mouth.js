@@ -6,7 +6,7 @@ import React, { useEffect, useRef } from 'react';
 
 export default function Mouth({ ready, currentMesh, set, material }, props) {
   const group = useRef();
-  const { nodes, materials, animations } = useGLTF('/model/MOOD/models/flippers.glb');
+  const { nodes, animations } = useGLTF('/model/MOOD/models/flippers.glb');
   const { actions } = useAnimations(animations, group);
 
   useEffect(() => {

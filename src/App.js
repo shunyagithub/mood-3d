@@ -1,7 +1,7 @@
 import { a, config, useSpring } from '@react-spring/three';
 import { Environment, OrbitControls, PresentationControls, useGLTF, useProgress } from '@react-three/drei';
 import { Canvas, useFrame } from '@react-three/fiber';
-import { GenericOptions, useDrag, useGesture } from '@use-gesture/react';
+import { useGesture } from '@use-gesture/react';
 import React, { Suspense, useCallback, useEffect, useState } from 'react';
 import * as THREE from 'three';
 
@@ -49,13 +49,13 @@ export default function App() {
     }
 
     if (mouthMesh === 1) {
-      setMouthPos([0, -0.34, 0]);
-      setHeadPos([0, -0.69, 0]);
+      setMouthPos([0, -0.36, 0]);
+      setHeadPos([0, -0.7, 0]);
     }
 
     if (mouthMesh === 3) {
-      setMouthPos([0, -0.38, 0]);
-      setHeadPos([0, -0.82, 0]);
+      setMouthPos([0, -0.39, 0]);
+      setHeadPos([0, -0.77, 0]);
     }
   }, [mouthMesh]);
 
@@ -67,12 +67,23 @@ export default function App() {
     onChangeMesh(bodyMesh, setBodyMesh);
   };
 
-  const randomMaterial = useCallback(() => {
-    setHatMaterial(onGetRandomMaterial(materials));
-    setMouthMaterial(onGetRandomMaterial(materials));
-    setNeckMaterial(onGetRandomMaterial(materials));
-    setBodyMaterial(onGetRandomMaterial(materials));
-  }, [materials]);
+  const randomMaterial = useCallback(
+    (active) => {
+      const moodModeColor = materials['black'] || materials['white'];
+      if (active) {
+        setHatMaterial(moodModeColor);
+        setMouthMaterial(moodModeColor);
+        setNeckMaterial(moodModeColor);
+        setBodyMaterial(moodModeColor);
+      } else {
+        setHatMaterial(onGetRandomMaterial(materials));
+        setMouthMaterial(onGetRandomMaterial(materials));
+        setNeckMaterial(onGetRandomMaterial(materials));
+        setBodyMaterial(onGetRandomMaterial(materials));
+      }
+    },
+    [materials],
+  );
 
   const bind = useGesture({
     onDrag: () => {},
@@ -107,8 +118,8 @@ export default function App() {
   useEffect(() => {
     onChangeBgColor();
     onSetMeshPosition();
-    randomMaterial();
-  }, [onSetMeshPosition, randomMaterial]);
+    randomMaterial(moodActive);
+  }, [onSetMeshPosition, randomMaterial, moodActive]);
 
   const store = { clicked, setClicked, ready, setReady };
 
