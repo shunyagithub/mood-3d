@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css2?family=Hind:wght@300;400;500;600;700&display=swap');
+
 html,
 body {
   padding: 0;
@@ -11,10 +13,11 @@ body {
 }
 
 body {
-  font-family: 'Inter var', sans-serif;
+  font-family: 'Hind', sans-serif;
   color: white;
   background: #101010;
   user-select: none;
+  line-height: 1rem;
 }
 
 canvas {
@@ -48,4 +51,16 @@ canvas {
 .fullscreen.clicked {
   pointer-events: none;
   opacity: 0;
+}
+
+.over {
+  position: fixed;
+  top: 0;
+  left: 0;
+  padding: 0.5rem;
+  color: white;
+  font-size: 12px;
+}
+.title {
+  text-transform: uppercase;
 }

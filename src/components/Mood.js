@@ -21,10 +21,10 @@ const state = proxy({
     body: 0,
   },
   materials: {
-    hat: colors['pink'],
-    mouth: colors['blue'],
-    neck: colors['yellow'],
-    body: colors['green'],
+    hat: 'pink',
+    mouth: 'blue',
+    neck: 'yellow',
+    body: 'green',
   },
 });
 

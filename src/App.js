@@ -1,9 +1,11 @@
-import { Environment, OrbitControls, PresentationControls, useProgress } from '@react-three/drei';
+import { Environment, OrbitControls, PresentationControls, Text, useProgress } from '@react-three/drei';
 import { Canvas, useFrame } from '@react-three/fiber';
 import React, { Suspense, useEffect, useState } from 'react';
 import * as THREE from 'three';
 
 import Overlay from './Overlay';
+import Texts from './Texts';
+import BackTtext from './components/BackText';
 import Mood from './components/Mood';
 import './styles.css';
 
@@ -49,15 +51,16 @@ export default function App() {
 
   return (
     <div className="App">
-      <Canvas shadows dpr={[1, 20]} camera={{ position: [10, 0, 20], fov: 5 }} onClick={() => onChangeBgColor()}>
+      <Canvas shadows dpr={[1, 20]} camera={{ position: [40, 3, 5], fov: 8 }} onClick={() => onChangeBgColor()}>
         <Suspense fallback={false}>
           <OrbitControls enabled={false} />
           <color attach="background" args={[bgColor]} />
-          <fog attach="fog" args={['white', 70, 100]} />
+          <fog attach="fog" args={['white', 100, 100]} />
           <ambientLight intensity={0.9} />
           <spotLight position={[10, 10, 10]} angle={0.15} penumbra={1} shadow-mapSize={[512, 512]} castShadow />
           <spotLight position={[-10, 10, 10]} angle={0.15} penumbra={1} shadow-mapSize={[512, 512]} castShadow />
 
+          <BackTtext />
           <PresentationControls
             global
             config={{ mass: 2, tension: 1000 }}
@@ -72,6 +75,7 @@ export default function App() {
           <Intro start={ready && clicked} set={setReady} />
         </Suspense>
       </Canvas>
+      <Texts />
       <Overlay {...store} />
     </div>
   );
@@ -95,8 +99,10 @@ function Intro({ start, set, setMousePos }) {
     if (start) {
       // setMousePos({ x: state.mouse.x, y: state.mouse.y });
       state.camera.lookAt(0, 0, 0);
-      state.camera.fov = 8;
-      state.camera.position.lerp(vec.set(65, 3, 10), 0.01);
+      state.camera.fov = 3;
+      state.camera.position.lerp(vec.set(90, 5, 20), 0.01);
+      state.camera.updateProjectionMatrix();
     }
+    return null;
   });
 }
