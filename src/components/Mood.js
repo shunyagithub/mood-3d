@@ -59,22 +59,25 @@ export default function Mood({ store, active }) {
     state.meshes.body = Math.floor(Math.random() * 4);
   };
 
-  const randomMaterial = useCallback(() => {
+  const randomMaterial = () => {
     if (active) {
-      setTimeout(() => {
-        state.materials.hat = state.materials.mouth = state.materials.neck = state.materials.body = 'black';
-      }, 250);
+      state.materials.hat = state.materials.mouth = state.materials.neck = state.materials.body = 'black';
     } else {
       state.materials.hat = onGetRandomMaterial(materials);
       state.materials.mouth = onGetRandomMaterial(materials);
       state.materials.neck = onGetRandomMaterial(materials);
       state.materials.body = onGetRandomMaterial(materials);
     }
-  }, [materials, active]);
+  };
 
   const { rotation } = useSpring({
     rotation: active ? [0, Math.PI * 2, 0] : [0, 0, 0],
     config: { ...config.wobbly, duration: 500, easing: easings.easeInOutCirc },
+    onStart: () => {
+      setTimeout(() => {
+        randomMaterial();
+      }, 250);
+    },
   });
 
   const bind = useGesture({
