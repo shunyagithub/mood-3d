@@ -4,12 +4,13 @@ import { useGesture } from '@use-gesture/react';
 import { useCallback, useEffect, useState } from 'react';
 import { proxy, useSnapshot } from 'valtio';
 
-import { onGetRandomMaterial } from '../hooks/onGetRandomMaterial';
 import Body from './Body';
 import Eye from './Eye';
 import Hat from './Hat';
 import Mouth from './Mouth';
 import Neck from './Neck';
+
+const colors = ['blue', 'orange', 'green', 'yellow', 'pink'];
 
 const state = proxy({
   meshes: {
@@ -20,12 +21,17 @@ const state = proxy({
     body: 0,
   },
   materials: {
-    hat: 'pink',
-    mouth: 'blue',
-    neck: 'yellow',
-    body: 'green',
+    hat: colors['pink'],
+    mouth: colors['blue'],
+    neck: colors['yellow'],
+    body: colors['green'],
   },
 });
+
+const onGetRandomMaterial = (materials) => {
+  const color = colors[Math.floor(Math.random() * colors.length)];
+  return materials[color].name;
+};
 
 export default function Mood({ store, active }) {
   const snap = useSnapshot(state);
