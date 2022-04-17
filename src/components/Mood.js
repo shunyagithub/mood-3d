@@ -33,7 +33,7 @@ const onGetRandomMaterial = (materials) => {
   return materials[color].name;
 };
 
-export default function Mood({ store, active }) {
+export default function Mood({ store, active, onChangeBgColor }) {
   const snap = useSnapshot(state);
 
   const [mouthPos, setMouthPos] = useState([0, 0, 0]);
@@ -92,6 +92,7 @@ export default function Mood({ store, active }) {
       if (!tap) {
         randomMaterial();
         randomMesh();
+        onChangeBgColor();
       }
     },
   });

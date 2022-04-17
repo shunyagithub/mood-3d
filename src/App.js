@@ -20,25 +20,6 @@ export default function App() {
 
   const [bgColor, setBgColor] = useState('');
 
-  useEffect(() => {
-    const pressed = [];
-    const downHandler = ({ key }) => {
-      pressed.push(key);
-      pressed.splice(-code.length - 1, pressed.length - code.length);
-
-      if (pressed.join('').includes(code)) {
-        setMoodActive(true);
-      } else {
-        setMoodActive(false);
-      }
-    };
-    window.addEventListener('keydown', downHandler);
-
-    return () => {
-      setMoodActive(false);
-    };
-  }, [setMoodActive]);
-
   const onChangeBgColor = () => {
     setBgColor(bgColors[Math.floor(Math.random() * bgColors.length)]);
   };
@@ -68,10 +49,11 @@ export default function App() {
             polar={[-Math.PI / 10, Math.PI / 10]}
             azimuth={[-Math.PI / 10, Math.PI / 10]}
           >
-            <Mood store={store} active={moodActive} />
+            <Mood store={store} active={moodActive} onChangeBgColor={onChangeBgColor} />
           </PresentationControls>
 
           <Environment preset="city" />
+          <KeyPress set={setMoodActive} />
           <Intro start={ready && clicked} set={setReady} />
         </Suspense>
       </Canvas>
@@ -105,4 +87,25 @@ function Intro({ start, set, setMousePos }) {
     }
     return null;
   });
+}
+
+function KeyPress({ set }) {
+  useEffect(() => {
+    const pressed = [];
+    const downHandler = ({ key }) => {
+      pressed.push(key);
+      pressed.splice(-code.length - 1, pressed.length - code.length);
+
+      if (pressed.join('').includes(code)) {
+        set(true);
+      } else {
+        set(false);
+      }
+    };
+    window.addEventListener('keydown', downHandler);
+
+    return () => {
+      set(false);
+    };
+  }, [set]);
 }
