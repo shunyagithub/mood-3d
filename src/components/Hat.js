@@ -53,7 +53,7 @@ export default function Hat({ ready, currentMesh, set, material }, props) {
             receiveShadow
             geometry={nodes.hat_4.geometry}
             material={material}
-            position={[0, -1.52, 0]}
+            position={[0, -1.54, 0]}
           />
         </group>
       </group>
