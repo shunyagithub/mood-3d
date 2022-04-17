@@ -1,20 +1,11 @@
-import { a, config, easings, useSpring } from '@react-spring/three';
-import { Environment, OrbitControls, PresentationControls, useGLTF, useProgress } from '@react-three/drei';
+import { Environment, OrbitControls, PresentationControls, useProgress } from '@react-three/drei';
 import { Canvas, useFrame } from '@react-three/fiber';
-import { useGesture } from '@use-gesture/react';
-import React, { Suspense, useCallback, useEffect, useState } from 'react';
+import React, { Suspense, useEffect, useState } from 'react';
 import * as THREE from 'three';
 
 import Overlay from './Overlay';
-import Body from './components/Body';
-import Eye from './components/Eye';
-import Hat from './components/Hat';
-import Mouth from './components/Mouth';
-import Neck from './components/Neck';
-import { onChangeMesh } from './hooks/onChangeMesh';
-import { onGetRandomMaterial } from './hooks/onGetRandomMaterial';
+import Mood from './components/Mood';
 import './styles.css';
-import { useControls } from './utils/useControl';
 
 const code = 'mood';
 const bgColors = ['#DFD3A7', '#C6D1A6', '#E4C1B6', '#C7DFE4', '#C6C9DA'];
@@ -22,77 +13,10 @@ const bgColors = ['#DFD3A7', '#C6D1A6', '#E4C1B6', '#C7DFE4', '#C6C9DA'];
 export default function App() {
   const [clicked, setClicked] = useState(false);
   const [ready, setReady] = useState(false);
-  const [mousePos, setMousePos] = useState({ x: null, y: null });
   const [moodActive, setMoodActive] = useState(false);
+  // const [mousePos, setMousePos] = useState({ x: null, y: null });
 
   const [bgColor, setBgColor] = useState('');
-
-  const [hatMesh, setHatMesh] = useState(0);
-  const [eyeMesh, setEyeMesh] = useState(0);
-  const [mouthMesh, setMouthMesh] = useState(0);
-  const [neckMesh, setNeckMesh] = useState(0);
-  const [bodyMesh, setBodyMesh] = useState(0);
-
-  const [mouthPos, setMouthPos] = useState([0, 0, 0]);
-  const [headPos, setHeadPos] = useState([0, 0, 0]);
-
-  const { materials } = useGLTF('/model/MOOD/models/flippers.glb');
-  const [hatMaterial, setHatMaterial] = useState(materials[0]);
-  const [mouthMaterial, setMouthMaterial] = useState(materials[0]);
-  const [neckMaterial, setNeckMaterial] = useState(materials[0]);
-  const [bodyMaterial, setBodyMaterial] = useState(materials[0]);
-
-  const onSetMeshPosition = useCallback(() => {
-    if (mouthMesh === 0 || mouthMesh === 2) {
-      setMouthPos([0, 0, 0]);
-      setHeadPos([0, 0, 0]);
-    }
-
-    if (mouthMesh === 1) {
-      setMouthPos([0, -0.36, 0]);
-      setHeadPos([0, -0.7, 0]);
-    }
-
-    if (mouthMesh === 3) {
-      setMouthPos([0, -0.39, 0]);
-      setHeadPos([0, -0.77, 0]);
-    }
-  }, [mouthMesh]);
-
-  const randomMesh = () => {
-    onChangeMesh(hatMesh, setHatMesh);
-    onChangeMesh(eyeMesh, setEyeMesh);
-    onChangeMesh(mouthMesh, setMouthMesh);
-    onChangeMesh(neckMesh, setNeckMesh);
-    onChangeMesh(bodyMesh, setBodyMesh);
-  };
-
-  const randomMaterial = useCallback(
-    (active) => {
-      const moodModeColor = materials['black'] || materials['white'];
-      if (active) {
-        setTimeout(() => {
-          setHatMaterial(moodModeColor);
-          setMouthMaterial(moodModeColor);
-          setNeckMaterial(moodModeColor);
-          setBodyMaterial(moodModeColor);
-        }, 250);
-      } else {
-        setHatMaterial(onGetRandomMaterial(materials));
-        setMouthMaterial(onGetRandomMaterial(materials));
-        setNeckMaterial(onGetRandomMaterial(materials));
-        setBodyMaterial(onGetRandomMaterial(materials));
-      }
-    },
-    [materials],
-  );
-
-  const bind = useGesture({
-    onDrag: () => {},
-    onDragEnd: ({ tap }) => {
-      if (!tap) randomMesh();
-    },
-  });
 
   useEffect(() => {
     const pressed = [];
@@ -119,18 +43,9 @@ export default function App() {
 
   useEffect(() => {
     onChangeBgColor();
-    onSetMeshPosition();
-    randomMaterial(moodActive);
-  }, [onSetMeshPosition, randomMaterial, moodActive]);
+  }, []);
 
   const store = { clicked, setClicked, ready, setReady };
-
-  const controls = useControls();
-
-  const { rotation } = useSpring({
-    rotation: moodActive ? [0, Math.PI * 2, 0] : [0, 0, 0],
-    config: { ...config.wobbly, duration: 500, easing: easings.easeInOutCirc },
-  });
 
   return (
     <div className="App">
@@ -150,34 +65,11 @@ export default function App() {
             polar={[-Math.PI / 10, Math.PI / 10]}
             azimuth={[-Math.PI / 10, Math.PI / 10]}
           >
-            <a.group rotation={rotation} {...bind()}>
-              <group position={headPos}>
-                <Hat {...store} currentMesh={hatMesh} set={setHatMesh} active={moodActive} material={hatMaterial} />
-                <Eye {...store} currentMesh={eyeMesh} set={setEyeMesh} active={moodActive} />
-              </group>
-              <group position={mouthPos}>
-                <Mouth
-                  {...store}
-                  currentMesh={mouthMesh}
-                  set={setMouthMesh}
-                  active={moodActive}
-                  material={mouthMaterial}
-                />
-              </group>
-              <Neck {...store} currentMesh={neckMesh} set={setNeckMesh} active={moodActive} material={neckMaterial} />
-              <Body
-                controls={controls}
-                {...store}
-                currentMesh={bodyMesh}
-                set={setBodyMesh}
-                active={moodActive}
-                material={bodyMaterial}
-              />
-            </a.group>
+            <Mood store={store} active={moodActive} />
           </PresentationControls>
 
           <Environment preset="city" />
-          <Intro start={ready && clicked} set={setReady} setMousePos={setMousePos} />
+          <Intro start={ready && clicked} set={setReady} />
         </Suspense>
       </Canvas>
       <Overlay {...store} />
@@ -201,7 +93,7 @@ function Intro({ start, set, setMousePos }) {
 
   return useFrame((state) => {
     if (start) {
-      setMousePos({ x: state.mouse.x, y: state.mouse.y });
+      // setMousePos({ x: state.mouse.x, y: state.mouse.y });
       state.camera.lookAt(0, 0, 0);
       state.camera.fov = 8;
       state.camera.position.lerp(vec.set(65, 3, 10), 0.01);

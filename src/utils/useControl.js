@@ -31,14 +31,12 @@ export function useKeySquence(target) {
 
 export function useControls() {
   const keys = useRef({
-    keyW: false,
-    keyG: false,
     keyM: false,
-    keyI: false,
+    keyO: false,
+    keyD: false,
   });
-  useKeyPress(['w'], (pressed) => (keys.current.keyW = pressed));
-  useKeyPress(['g'], (pressed) => (keys.current.keyG = pressed));
   useKeyPress(['m'], (pressed) => (keys.current.keyM = pressed));
-  useKeyPress(['i'], (pressed) => (keys.current.keyI = pressed));
+  useKeyPress(['o'], (pressed) => (keys.current.keyO = pressed));
+  useKeyPress(['d'], (pressed) => (keys.current.keyD = pressed));
   return keys;
 }
