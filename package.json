@@ -3,20 +3,20 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
-    "@react-spring/three": "^9.4.4",
-    "@react-three/drei": "^9.105.6",
-    "@react-three/fiber": "^8.16.6",
-    "@testing-library/jest-dom": "^5.16.4",
-    "@testing-library/react": "^13.0.0",
-    "@testing-library/user-event": "^14.0.4",
-    "@use-gesture/react": "^10.2.11",
-    "react": "^18.0.0",
-    "react-dom": "^18.0.0",
-    "react-scripts": "5.0.0",
+    "@react-spring/three": "^9.7.4",
+    "@react-three/drei": "^9.109.1",
+    "@react-three/fiber": "^8.16.8",
+    "@testing-library/jest-dom": "^6.4.7",
+    "@testing-library/react": "^16.0.0",
+    "@testing-library/user-event": "^14.5.2",
+    "@use-gesture/react": "^10.3.1",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
+    "react-scripts": "5.0.1",
     "react-three-fiber": "^6.0.13",
-    "three": "^0.139.2",
-    "valtio": "^1.5.2",
-    "web-vitals": "^2.1.4"
+    "three": "^0.166.1",
+    "valtio": "^1.13.2",
+    "web-vitals": "^4.2.2"
   },
   "scripts": {
     "start": "react-scripts start",
@@ -43,7 +43,7 @@
     ]
   },
   "devDependencies": {
-    "@trivago/prettier-plugin-sort-imports": "^3.2.0",
-    "prettier": "^2.6.2"
+    "@trivago/prettier-plugin-sort-imports": "^4.3.0",
+    "prettier": "^3.3.3"
   }
 }
